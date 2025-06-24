@@ -15,8 +15,12 @@ import {
 } from "lucide-react";
 import classNames from "classnames";
 
+// استيراد المكونات الخاصة بإدارة الطلاب والمعلمين والمرشدين والصفوف
+import ClassesManagement from "./ClassesManagement";
 import StudentManagement from "./StudentManagement";
 import TeachersManagement from "./TeachersManagement";
+import PrinciplesManagement from "./PrinciplesManagement";
+import StudentAssignment from "./StudentAssignment";
 
 const menuItems = [
   { name: "Dashboard", icon: Home },
@@ -42,6 +46,15 @@ const AdminDashboard = () => {
     // راح تحصلين هذه الفانكشن في ملف src/pages/admin/TeachersManagement.jsx
     if (activePage === "إدارة المعلمين") {
       return <TeachersManagement />;
+    }
+    if (activePage === "إدارة المرشدين") {
+      return <PrinciplesManagement />;
+    }
+    if (activePage === "إدارة الصفوف") {
+      return <ClassesManagement />;
+    }
+    if (activePage === "تعيين طلاب") {
+      return <StudentAssignment />;
     }
     if (activePage === "Dashboard") {
       return (
@@ -88,7 +101,7 @@ const AdminDashboard = () => {
     );
   };
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div dir="rtl" className="flex h-screen bg-gray-100">
       <div
         className={classNames(
           "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 z-30 transition-transform duration-200 ease-in-out h-full",
