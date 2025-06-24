@@ -101,7 +101,7 @@ const AdminDashboard = () => {
     );
   };
   return (
-    <div dir="rtl" className="flex h-screen bg-gray-100">
+    <div  className="flex h-screen bg-gray-100">
       <div
         className={classNames(
           "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 z-30 transition-transform duration-200 ease-in-out h-full",
