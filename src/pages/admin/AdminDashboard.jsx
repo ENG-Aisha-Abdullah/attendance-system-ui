@@ -1,20 +1,33 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+
+import {
+  Menu,
+  X,
+  Home,
+  Users,
+  UserCheck,
+  UserPlus,
+  Building2,
+  ListChecks,
+  UserCog,
+  CheckCircle2,
+  FileText,
+} from "lucide-react";
+
 import classNames from "classnames";
 
 const menuItems = [
-  "Dashboard",
-  "إدارة الطلاب",
-  "إدارة المعلمين",
-  "إدارة المرشدين",
-  "إدارة الصفوف",
-  "تعيين طلاب",
-  "تعيين معلمين",
-  "تعيين مرشد",
-  "الأعذار",
-  "التقارير",
+  { name: "Dashboard", icon: Home },
+  { name: "إدارة الطلاب", icon: Users },
+  { name: "إدارة المعلمين", icon: UserCheck },
+  { name: "إدارة المرشدين", icon: UserPlus },
+  { name: "إدارة الصفوف", icon: Building2 },
+  { name: "تعيين طلاب", icon: ListChecks },
+  { name: "تعيين معلمين", icon: UserCog },
+  { name: "تعيين مرشد", icon: UserCog },
+  { name: "الأعذار", icon: CheckCircle2 },
+  { name: "التقارير", icon: FileText },
 ];
-
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePage, setActivePage] = useState("Dashboard");
@@ -24,32 +37,40 @@ const AdminDashboard = () => {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
-            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الطلاب</h3>
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
+              الطلاب
+            </h3>
             <p className="text-3xl font-bold text-gray-700">120</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
-            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">المعلمين</h3>
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
+              المعلمين
+            </h3>
             <p className="text-3xl font-bold text-gray-700">25</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
-            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الأعذار</h3>
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
+              الأعذار
+            </h3>
             <p className="text-3xl font-bold text-gray-700">17</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
-            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الغيابات</h3>
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
+              الغيابات
+            </h3>
             <p className="text-3xl font-bold text-gray-700">43</p>
           </div>
         </div>
       );
     }
-  
+
     return (
-      <div className="flex justify-center items-center h-full max-w-2xl">
+      <div className="flex justify-center items-center h-full max-w-2xl mx-auto">
         <div className="text-gray-800 font-medium text-lg w-full max-w-3xl">
           <h2 className="text-3xl text-center font-bold mb-4 text-[#5196ac]">
             {activePage}
           </h2>
-          <div className="p-4 rounded-xl shadow-md bg-zinc-50">
+          <div className="p-4 rounded-xl shadow-md bg-zinc-50 ">
             <p className="text-gray-600 text-center">محتوى {activePage}.</p>
           </div>
         </div>
@@ -71,23 +92,24 @@ const AdminDashboard = () => {
           لوحة التحكم
         </div>
         <ul className="p-4 space-y-2">
-          {menuItems.map((item) => (
+          {menuItems.map(({ name, icon: Icon }) => (
             <li
-              key={item}
+              key={name}
               className={classNames(
-                "p-3 rounded-lg cursor-pointer transition-colors duration-200",
+                "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-200",
                 {
-                  "bg-[#5196ac] text-white shadow-md": activePage === item,
+                  "bg-[#5196ac] text-white shadow-md": activePage === name,
                   "text-white hover:bg-[#5196AC] hover:opacity-80":
-                    activePage !== item,
+                    activePage !== name,
                 }
               )}
               onClick={() => {
-                setActivePage(item);
+                setActivePage(name);
                 setSidebarOpen(false);
               }}
             >
-              {item}
+              <Icon size={20} />
+              <span>{name}</span>
             </li>
           ))}
         </ul>
