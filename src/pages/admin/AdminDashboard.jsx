@@ -63,54 +63,58 @@ const AdminDashboard = () => {
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
               الطلاب
             </h3>
-            <p className="text-3xl font-bold text-gray-700">120</p>
+            <p className="text-3xl font-bold text-gray-700">20</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
               المعلمين
             </h3>
-            <p className="text-3xl font-bold text-gray-700">25</p>
+            <p className="text-3xl font-bold text-gray-700">5</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
               الأعذار
             </h3>
-            <p className="text-3xl font-bold text-gray-700">17</p>
+            <p className="text-3xl font-bold text-gray-700">7</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
               الغيابات
             </h3>
-            <p className="text-3xl font-bold text-gray-700">43</p>
+            <p className="text-3xl font-bold text-gray-700">7</p>
           </div>
         </div>
       );
     }
 
     return (
-      <div className="flex justify-center items-center h-full max-w-2xl mx-auto">
-        <div className="text-gray-800 font-medium text-lg w-full max-w-3xl">
-          <h2 className="text-3xl text-center font-bold mb-4 text-[#5196ac]">
-            {activePage}
-          </h2>
-          <div className="p-4 rounded-xl shadow-md bg-zinc-50 ">
-            <p className="text-gray-600 text-center">محتوى {activePage}.</p>
-          </div>
-        </div>
+      <div className="px-4 py-6 w-full max-w-4xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl text-right font-bold mb-4 text-[#5196ac]">
+        {activePage}
+      </h2>
+      <div className="p-4 rounded-xl shadow-md bg-zinc-50">
+        <p className="text-gray-600 text-center">محتوى {activePage}.</p>
       </div>
+    </div>
     );
   };
   return (
-    <div  className="flex h-screen bg-gray-100">
+    <div className="flex flex-row-reverse h-screen bg-gray-100">
       <div
         className={classNames(
-          "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 z-30 transition-transform duration-200 ease-in-out h-full",
+          "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 md:right-0 right-0 z-30 transition-transform duration-200 ease-in-out h-full",
+
           {
-            "-translate-x-full": !sidebarOpen,
+           "translate-x-full": !sidebarOpen,
             "translate-x-0": sidebarOpen,
           }
         )}
       >
+        <div className="flex justify-end p-2 md:hidden">
+          <button onClick={() => setSidebarOpen(false)} className="text-white">
+            <X size={24} />
+          </button>
+        </div>
         <div className="p-6 border-b text-center text-2xl font-bold text-white ">
           لوحة التحكم
         </div>
@@ -139,7 +143,7 @@ const AdminDashboard = () => {
       </div>
 
       {sidebarOpen && (
-        <div
+        <div 
           className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
