@@ -90,7 +90,7 @@ export default function TeachersManagement() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div dir="rtl" className="max-w-4xl mx-auto space-y-6">
       <div className="bg-white p-4 rounded-xl shadow">
         <h3 className="text-xl font-bold text-[#5196ac] mb-4">إضافة معلم</h3>
         <div className="flex flex-col sm:flex-row gap-4">

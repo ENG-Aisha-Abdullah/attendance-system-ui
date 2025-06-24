@@ -58,7 +58,7 @@ const AdminDashboard = () => {
     }
     if (activePage === "Dashboard") {
       return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
               الطلاب
@@ -92,14 +92,14 @@ const AdminDashboard = () => {
       <h2 className="text-2xl sm:text-3xl text-right font-bold mb-4 text-[#5196ac]">
         {activePage}
       </h2>
-      <div className="p-4 rounded-xl shadow-md bg-zinc-50">
+      <div  className="p-4 rounded-xl shadow-md bg-zinc-50">
         <p className="text-gray-600 text-center">محتوى {activePage}.</p>
       </div>
     </div>
     );
   };
   return (
-    <div className="flex flex-row-reverse h-screen bg-gray-100">
+    <div dir="rtl"  className="flex h-screen bg-gray-100">
       <div
         className={classNames(
           "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 md:right-0 right-0 z-30 transition-transform duration-200 ease-in-out h-full",

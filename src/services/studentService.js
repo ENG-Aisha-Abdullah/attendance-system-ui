@@ -9,7 +9,15 @@ export const getUnassignedStudents = async () => {
     (item) => item.role === "student" && item.assigned === false
   );
 };
-
+export const assignStudentsToClass = async (classId, studentIds) => {
+    const requests = studentIds.map((id) =>
+      axios.put(`${BASE_URL}/students/${id}`, {
+        classId,
+        assigned: true,
+      })
+    );
+    return Promise.all(requests);
+  };
 export const getAllStudents = async () => {
   const response = await axios.get(BASE_URL);
 
@@ -28,7 +36,16 @@ export const addStudent = async (student) => {
 export const deleteStudent = async (id) => {
   await axios.delete(`${BASE_URL}/${id}`);
 };
-export const assignStudent = async (id) => {
-  const response = await axios.put(`${BASE_URL}/${id}`, { assigned: true });
+// export const assignStudent = async (id) => {
+//   const response = await axios.put(`${BASE_URL}/${id}`, { assigned: true });
+//   return response.data;
+// };
+export const assignStudent = async (id, assigned) => {
+  const response = await axios.put(`${BASE_URL}/${id}`, { assigned });
   return response.data;
+};
+
+export const updateStudent = async (id, data) => {
+  const res = await axios.put(`${BASE_URL}/${id}`, data);
+  return res.data;
 };
