@@ -20,43 +20,71 @@ const AdminDashboard = () => {
   const [activePage, setActivePage] = useState("Dashboard");
 
   const renderContent = () => {
+    if (activePage === "Dashboard") {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الطلاب</h3>
+            <p className="text-3xl font-bold text-gray-700">120</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">المعلمين</h3>
+            <p className="text-3xl font-bold text-gray-700">25</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الأعذار</h3>
+            <p className="text-3xl font-bold text-gray-700">17</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
+            <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الغيابات</h3>
+            <p className="text-3xl font-bold text-gray-700">43</p>
+          </div>
+        </div>
+      );
+    }
+  
     return (
-      <div className="text-gray-700 font-semibold text-lg">
-
-        <h2 className="text-2xl mb-4">{activePage}</h2>
-        <p>محتوى {activePage} سيظهر هنا.</p>
+      <div className="flex justify-center items-center h-full max-w-2xl">
+        <div className="text-gray-800 font-medium text-lg w-full max-w-3xl">
+          <h2 className="text-3xl text-center font-bold mb-4 text-[#5196ac]">
+            {activePage}
+          </h2>
+          <div className="p-4 rounded-xl shadow-md bg-zinc-50">
+            <p className="text-gray-600 text-center">محتوى {activePage}.</p>
+          </div>
+        </div>
       </div>
     );
   };
-
   return (
-    <div className="flex h-screen">
-
+    <div className="flex h-screen bg-gray-100">
       <div
         className={classNames(
-          "bg-white shadow-md w-64 fixed md:static md:translate-x-0 z-30 transition-transform duration-200 ease-in-out h-full",
+          "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 z-30 transition-transform duration-200 ease-in-out h-full",
           {
             "-translate-x-full": !sidebarOpen,
             "translate-x-0": sidebarOpen,
           }
         )}
       >
-        <div className="p-4 border-b text-xl font-bold text-blue-600">
-          لوحة الأدمن
+        <div className="p-6 border-b text-center text-2xl font-bold text-white ">
+          لوحة التحكم
         </div>
         <ul className="p-4 space-y-2">
           {menuItems.map((item) => (
             <li
               key={item}
               className={classNames(
-                "p-2 rounded cursor-pointer hover:bg-blue-100",
+                "p-3 rounded-lg cursor-pointer transition-colors duration-200",
                 {
-                  "bg-blue-500 text-white": activePage === item,
+                  "bg-[#5196ac] text-white shadow-md": activePage === item,
+                  "text-white hover:bg-[#5196AC] hover:opacity-80":
+                    activePage !== item,
                 }
               )}
               onClick={() => {
                 setActivePage(item);
-                setSidebarOpen(false); 
+                setSidebarOpen(false);
               }}
             >
               {item}
@@ -65,7 +93,6 @@ const AdminDashboard = () => {
         </ul>
       </div>
 
-
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
@@ -73,17 +100,15 @@ const AdminDashboard = () => {
         ></div>
       )}
 
-
-      <div className="flex-1 flex flex-col ml-0 md:ml-64">
-
+      <div className="flex-1 flex flex-col ml-0 md:ml-64 overflow-auto">
         <div className="flex items-center justify-between bg-white p-4 shadow-md md:hidden">
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <span className="font-bold text-blue-600">لوحة الأدمن</span>
+          <span className="font-bold text-[#5196ac]">لوحة الأدمن</span>{" "}
         </div>
 
-        <div className="p-6 bg-gray-50 flex-1 overflow-auto">{renderContent()}</div>
+        <div className="p-6">{renderContent()}</div>
       </div>
     </div>
   );
