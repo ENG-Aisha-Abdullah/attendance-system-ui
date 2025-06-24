@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllStudents, addStudent, deleteStudent } from "../../services/studentService";
+import {
+  getAllStudents,
+  addStudent,
+  deleteStudent,
+} from "../../services/studentService";
+import Swal from "sweetalert2";
 
 const StudentManagement = () => {
   const [students, setStudents] = useState([]);
@@ -9,18 +14,67 @@ const StudentManagement = () => {
     getAllStudents().then(setStudents);
   }, []);
 
-  const handleAddStudent = () => {
-    if (!newStudent.name || !newStudent.email) return;
-    addStudent(newStudent).then((added) => {
+  const handleAddStudent = async () => {
+    if (!newStudent.name || !newStudent.email) {
+      Swal.fire({
+        icon: "error",
+        title: "خطأ",
+        text: "يجب تعبئة جميع الحقول.",
+      });
+      return;
+    }
+
+    try {
+      const added = await addStudent(newStudent);
       setStudents((prev) => [...prev, added]);
       setNewStudent({ name: "", email: "" });
-    });
-  };
 
-  const handleDeleteStudent = (id) => {
-    deleteStudent(id).then(() => {
-      setStudents((prev) => prev.filter((s) => s.id !== id));
+      Swal.fire({
+        icon: "success",
+        title: "تمت الإضافة",
+        text: "تم إضافة الطالب بنجاح.",
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "فشل في الإضافة",
+        text: "حدث خطأ أثناء إضافة الطالب.",
+      });
+    }
+  };
+  const handleDeleteStudent = async (id) => {
+    const result = await Swal.fire({
+      title: "هل أنت متأكد؟",
+      text: "لن تتمكن من التراجع بعد الحذف!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "نعم، احذفه!",
+      cancelButtonText: "إلغاء",
     });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteStudent(id);
+        setStudents((prev) => prev.filter((s) => s.id !== id));
+
+        Swal.fire({
+          icon: "success",
+          title: "تم الحذف",
+          text: "تم حذف الطالب.",
+
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "فشل في الحذف",
+          text: "حدث خطأ أثناء حذف الطالب.",
+        });
+      }
+    }
   };
 
   return (
@@ -41,10 +95,12 @@ const StudentManagement = () => {
             type="email"
             placeholder="البريد الإلكتروني"
             className="border p-2 rounded w-full"
+            required
             value={newStudent.email}
             onChange={(e) =>
               setNewStudent({ ...newStudent, email: e.target.value })
             }
+          
           />
           <button
             className="bg-[#5196ac] text-white px-4 py-2 rounded"

@@ -35,9 +35,11 @@ const AdminDashboard = () => {
   const [activePage, setActivePage] = useState("Dashboard");
 
   const renderContent = () => {
+    // راح تحصلين هذه الفانكشن في ملف src/pages/admin/StudentManagement.jsx
     if (activePage === "إدارة الطلاب") {
       return <StudentManagement />;
     }
+    // راح تحصلين هذه الفانكشن في ملف src/pages/admin/TeachersManagement.jsx
     if (activePage === "إدارة المعلمين") {
       return <TeachersManagement />;
     }

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllTeachers, addTeacher, deleteTeacher } from "../../services/teacherService";
+import {
+  getAllTeachers,
+  addTeacher,
+  deleteTeacher,
+} from "../../services/teacherService";
+import Swal from "sweetalert2";
 
 export default function TeachersManagement() {
   const [teachers, setTeachers] = useState([]);
@@ -9,18 +14,79 @@ export default function TeachersManagement() {
     getAllTeachers().then(setTeachers);
   }, []);
 
-  const handleAddTeacher = () => {
-    if (!newTeacher.name || !newTeacher.email) return;
-    addTeacher(newTeacher).then((added) => {
+  const handleAddTeacher = async () => {
+    if (!newTeacher.name || !newTeacher.email) {
+      Swal.fire({
+        icon: "error",
+        title: "خطأ",
+        text: "جميع الحقول مطلوبة.",
+      });
+      return;
+    }
+
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(newTeacher.email)) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "بريد غير صالح",
+    //     text: "يرجى إدخال بريد إلكتروني صحيح.",
+    //   });
+    //   return;
+    // }
+
+    try {
+      const added = await addTeacher(newTeacher);
       setTeachers((prev) => [...prev, added]);
       setNewTeacher({ name: "", email: "" });
-    });
+
+      Swal.fire({
+        icon: "success",
+        title: "تمت الإضافة",
+        text: "تم إضافة المعلم بنجاح.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "خطأ في الإضافة",
+        text: "حدث خطأ أثناء محاولة الإضافة.",
+      });
+    }
   };
 
-  const handleDeleteTeacher = (id) => {
-    deleteTeacher(id).then(() => {
-      setTeachers((prev) => prev.filter((t) => t.id !== id));
+  const handleDeleteTeacher = async (id) => {
+    const result = await Swal.fire({
+      title: "هل أنت متأكد؟",
+      text: "لن تتمكن من التراجع بعد الحذف!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "نعم، احذفه!",
+      cancelButtonText: "إلغاء",
     });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteTeacher(id);
+        setTeachers((prev) => prev.filter((t) => t.id !== id));
+
+        Swal.fire({
+          icon: "success",
+          title: "تم الحذف",
+          text: "تم حذف المعلم.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch {
+        Swal.fire({
+          icon: "error",
+          title: "خطأ",
+          text: "حدث خطأ أثناء الحذف.",
+        });
+      }
+    }
   };
 
   return (
@@ -56,7 +122,9 @@ export default function TeachersManagement() {
       </div>
 
       <div className="bg-white p-4 rounded-xl shadow">
-        <h3 className="text-xl font-bold text-[#5196ac] mb-4">قائمة المعلمين</h3>
+        <h3 className="text-xl font-bold text-[#5196ac] mb-4">
+          قائمة المعلمين
+        </h3>
         <table className="w-full text-center">
           <thead>
             <tr className="bg-[#5196ac] text-white">
