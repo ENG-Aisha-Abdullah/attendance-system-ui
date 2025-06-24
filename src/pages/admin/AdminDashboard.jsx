@@ -13,8 +13,10 @@ import {
   CheckCircle2,
   FileText,
 } from "lucide-react";
-
 import classNames from "classnames";
+
+import StudentManagement from "./StudentManagement";
+import TeachersManagement from "./TeachersManagement";
 
 const menuItems = [
   { name: "Dashboard", icon: Home },
@@ -33,6 +35,12 @@ const AdminDashboard = () => {
   const [activePage, setActivePage] = useState("Dashboard");
 
   const renderContent = () => {
+    if (activePage === "إدارة الطلاب") {
+      return <StudentManagement />;
+    }
+    if (activePage === "إدارة المعلمين") {
+      return <TeachersManagement />;
+    }
     if (activePage === "Dashboard") {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
