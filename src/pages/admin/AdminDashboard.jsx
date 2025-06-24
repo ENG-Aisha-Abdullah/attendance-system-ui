@@ -22,7 +22,7 @@ const AdminDashboard = () => {
   const renderContent = () => {
     if (activePage === "Dashboard") {
       return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">الطلاب</h3>
             <p className="text-3xl font-bold text-gray-700">120</p>
@@ -100,7 +100,7 @@ const AdminDashboard = () => {
         ></div>
       )}
 
-      <div className="flex-1 flex flex-col ml-0 md:ml-64 overflow-auto">
+      <div className="flex-1 flex flex-col ml-0 overflow-auto">
         <div className="flex items-center justify-between bg-white p-4 shadow-md md:hidden">
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
