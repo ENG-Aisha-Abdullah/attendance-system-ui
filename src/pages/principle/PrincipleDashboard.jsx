@@ -65,6 +65,7 @@ const PrincipleDashboard = () => {
       <div className="pt-25 pb-10 min-h-screen bg-gray-200 text-right">
         <div className="p-8 bg-white rounded-xl shadow-md overflow-hidden flex flex-col mx-5 md:mx-10">
           <h1 className="text-2xl font-bold text-[#27465b] mb-4">...</h1>
+        
         </div>
       </div>
     </>
