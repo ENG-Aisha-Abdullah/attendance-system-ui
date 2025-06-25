@@ -2,6 +2,15 @@ import axios from "axios";
 
 const BASE_URL = "https://6836b885664e72d28e41d28e.mockapi.io/api/register";
 
+export const updateExcuseStatus = async (id, status) => {
+  const response = await axios.put(
+    `https://6836b885664e72d28e41d28e.mockapi.io/api/register/${id}`,
+    {
+      status,
+    }
+  );
+  return response.data;
+};
 export const getAllExcuses = async () => {
   const response = await axios.get(BASE_URL);
   return response.data.filter((item) => item.role === "excuse");
@@ -32,4 +41,10 @@ export const rejectExcuse = async (id) => {
 
 export const deleteExcuse = async (id) => {
   await axios.delete(`${BASE_URL}/${id}`);
+};
+export const getStudentExcuses = async (studentId) => {
+  const response = await axios.get(BASE_URL);
+  return response.data.filter(
+    (item) => item.role === "excuse" && item.studentId === studentId
+  );
 };

@@ -1,54 +1,178 @@
 import { useEffect, useState } from "react";
-import { getAllExcuses } from "../../services/excuseService";
+import Swal from "sweetalert2";
+import { getStudentProfile } from "../../services/studentService";
+import { getStudentExcuses, submitExcuse } from "../../services/excuseService";
+import LoadingSpinner from "../component/LoadingSpinner";
 
 export default function StudentDashboard() {
-  const [counts, setCounts] = useState({
-    total: 0,
-    accepted: 0,
-    rejected: 0,
-    pending: 0,
-  });
-
-  const studentId = 1; 
+  const [student, setStudent] = useState("");
+  const [excuses, setExcuses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchExcuses() {
-      const all = await getAllExcuses();
-      const studentExcuses = all.filter((e) => +e.studentId === studentId);
-
-      setCounts({
-        total: studentExcuses.length,
-        accepted: studentExcuses.filter((e) => e.status === "accepted").length,
-        rejected: studentExcuses.filter((e) => e.status === "rejected").length,
-        pending: studentExcuses.filter((e) => e.status === "pending").length,
-      });
+    async function fetchData() {
+      try {
+        const studentData = await getStudentProfile();
+        const excusesData = await getStudentExcuses(studentData.id);
+        setStudent(studentData);
+        setExcuses(excusesData);
+      } catch (error) {
+        Swal.fire("خطأ", "فشل تحميل البيانات", "error");
+      } finally {
+        setLoading(false);
+      }
     }
-    fetchExcuses();
+    fetchData();
   }, []);
 
-  return (
-    <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow space-y-4">
-      <h2 className="text-xl font-bold text-[#5196ac] mb-4">
-        مرحبًا بك في لوحة تحكم الطالب
-      </h2>
+  const handleSubmitExcuse = async () => {
+    const { value: formValues } = await Swal.fire({
+      title: "رفع عذر جديد",
+      html: `
+        <input id="swal-date" type="date" class="swal2-input" placeholder="التاريخ">
+        <textarea id="swal-reason" class="swal2-textarea" placeholder="سبب العذر"></textarea>
+      `,
+      focusConfirm: false,
+      confirmButtonText: "إرسال",
+      cancelButtonText: "إلغاء",
+      showCancelButton: true,
+      preConfirm: () => {
+        const date = document.getElementById("swal-date").value;
+        const reason = document.getElementById("swal-reason").value;
+        if (!date || !reason) {
+          Swal.showValidationMessage("يرجى إدخال التاريخ والسبب");
+          return;
+        }
+        return { date, reason };
+      },
+    });
 
-      <div className="grid grid-cols-2 gap-4 text-center">
-        <div className="bg-blue-100 p-4 rounded">
-          <p className="text-lg font-bold text-blue-800">إجمالي الأعذار</p>
-          <p className="text-2xl">{counts.total}</p>
+    if (formValues) {
+      try {
+        await submitExcuse({
+          studentId: student.id,
+          date: formValues.date,
+          reason: formValues.reason,
+        });
+
+        Swal.fire("تم الإرسال", "تم رفع العذر بنجاح", "success");
+        const updated = await getStudentExcuses(student.id);
+        setExcuses(updated);
+      } catch (err) {
+        Swal.fire("خطأ", "فشل رفع العذر", "error");
+      }
+    }
+  };
+
+  const counts = {
+    total: excuses.length,
+    accepted: excuses.filter((e) => e.status === "accepted").length,
+    rejected: excuses.filter((e) => e.status === "rejected").length,
+    pending: excuses.filter((e) => e.status === "pending").length,
+  };
+
+  if (loading) return <LoadingSpinner />;
+
+  return (
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <h2 className="text-2xl font-bold text-[#5196ac]">لوحة تحكم الطالب</h2>
+
+      <div className="bg-white p-6 rounded-xl shadow space-y-4">
+        <h3 className="text-xl font-semibold">معلومات الطالب</h3>
+        <p>
+          <strong>الاسم:</strong> {student.name}
+        </p>
+        <p>
+          <strong>الصف:</strong> {student.className || "-"}
+        </p>
+        <p>
+          <strong>الحالة:</strong> {student.assigned ? "يُدرس" : "غير معين"}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-4 gap-6 text-center">
+        <div className="bg-blue-50 p-4 rounded shadow-sm">
+          <p className="text-lg font-semibold text-blue-600">إجمالي الأعذار</p>
+          <p className="text-3xl font-bold text-blue-700">{counts.total}</p>
         </div>
-        <div className="bg-green-100 p-4 rounded">
-          <p className="text-lg font-bold text-green-800">مقبولة</p>
-          <p className="text-2xl">{counts.accepted}</p>
+        <div className="bg-green-50 p-4 rounded shadow-sm">
+          <p className="text-lg font-semibold text-green-600">مقبولة</p>
+          <p className="text-3xl font-bold text-green-700">{counts.accepted}</p>
         </div>
-        <div className="bg-red-100 p-4 rounded">
-          <p className="text-lg font-bold text-red-800">مرفوضة</p>
-          <p className="text-2xl">{counts.rejected}</p>
+        <div className="bg-red-50 p-4 rounded shadow-sm">
+          <p className="text-lg font-semibold text-red-600">مرفوضة</p>
+          <p className="text-3xl font-bold text-red-700">{counts.rejected}</p>
         </div>
-        <div className="bg-yellow-100 p-4 rounded">
-          <p className="text-lg font-bold text-yellow-800">معلقة</p>
-          <p className="text-2xl">{counts.pending}</p>
+        <div className="bg-yellow-50 p-4 rounded shadow-sm">
+          <p className="text-lg font-semibold text-yellow-600">معلقة</p>
+          <p className="text-3xl font-bold text-yellow-700">{counts.pending}</p>
         </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">الأعذار المقدمة</h3>
+        <button
+          className="bg-[#5196ac] text-white px-4 py-2 rounded hover:bg-[#41738b]"
+          onClick={handleSubmitExcuse}
+        >
+          رفع عذر جديد
+        </button>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-100 text-gray-700">
+              <th className="border border-gray-300 py-2 px-4">رقم العذر</th>
+              <th className="border border-gray-300 py-2 px-4">التاريخ</th>
+              <th className="border border-gray-300 py-2 px-4">سبب العذر</th>
+              <th className="border border-gray-300 py-2 px-4">الحالة</th>
+            </tr>
+          </thead>
+          <tbody>
+            {excuses.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="text-center py-6 text-gray-500">
+                  لا توجد أعذار حالياً
+                </td>
+              </tr>
+            ) : (
+              excuses.map((excuse, index) => (
+                <tr
+                  key={excuse.id}
+                  className={`border border-gray-300 ${
+                    index % 2 === 0 ? "bg-gray-50" : ""
+                  }`}
+                >
+                  <td className="border border-gray-300 py-2 px-4 text-center">
+                    {excuse.id}
+                  </td>
+                  <td className="border border-gray-300 py-2 px-4 text-center">
+                    {excuse.date}
+                  </td>
+                  <td className="border border-gray-300 py-2 px-4 text-center">
+                    {excuse.reason}
+                  </td>
+                  <td
+                    className={`border border-gray-300 py-2 px-4 text-center font-semibold ${
+                      excuse.status === "accepted"
+                        ? "text-green-700 bg-green-100 rounded"
+                        : excuse.status === "rejected"
+                        ? "text-red-700 bg-red-100 rounded"
+                        : "text-yellow-700 bg-yellow-100 rounded"
+                    }`}
+                  >
+                    {excuse.status === "accepted"
+                      ? "مقبول"
+                      : excuse.status === "rejected"
+                      ? "مرفوض"
+                      : "معلق"}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

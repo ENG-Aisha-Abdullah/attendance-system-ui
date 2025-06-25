@@ -46,3 +46,12 @@ export const updateStudent = async (id, data) => {
   const res = await axios.put(`${BASE_URL}/${id}`, data);
   return res.data;
 };
+// export const getStudentProfile = async (studentId) => {
+//     const response = await axios.get(`${BASE_URL}/${studentId}`);
+//     return response.data;
+//   };
+
+export const getStudentProfile = async () => {
+    const response = await axios.get(BASE_URL);
+    return response.data.find((item) => item.role === "student");
+  };
