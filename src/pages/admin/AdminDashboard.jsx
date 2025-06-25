@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import {
   Menu,
@@ -15,12 +16,17 @@ import {
 } from "lucide-react";
 import classNames from "classnames";
 
-// استيراد المكونات الخاصة بإدارة الطلاب والمعلمين والمرشدين والصفوف
 import ClassesManagement from "./ClassesManagement";
 import StudentManagement from "./StudentManagement";
 import TeachersManagement from "./TeachersManagement";
 import PrinciplesManagement from "./PrinciplesManagement";
 import StudentAssignment from "./StudentAssignment";
+import TeacherAssignment from "./TeacherAssignment";
+import PrincipleAssignment from "./PrincipleAssignment";
+import ExcusesManagement from "./ExcusesManagement";
+import Reports from "./Reports.jsx";
+
+const API = "https://6836b885664e72d28e41d28e.mockapi.io/api/register";
 
 const menuItems = [
   { name: "Dashboard", icon: Home },
@@ -34,6 +40,19 @@ const menuItems = [
   { name: "الأعذار", icon: CheckCircle2 },
   { name: "التقارير", icon: FileText },
 ];
+
+const pageComponents = {
+  "إدارة الطلاب": StudentManagement,
+  "إدارة المعلمين": TeachersManagement,
+  "إدارة المرشدين": PrinciplesManagement,
+  "إدارة الصفوف": ClassesManagement,
+  "تعيين طلاب": StudentAssignment,
+  "تعيين معلمين": TeacherAssignment,
+  "تعيين مرشد": PrincipleAssignment,
+  "الأعذار": ExcusesManagement,
+  "التقارير": Reports,
+};
+
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePage, setActivePage] = useState("Dashboard");
@@ -41,7 +60,7 @@ const AdminDashboard = () => {
   const renderContent = () => {
     // راح تحصلين هذه الفانكشن في ملف src/pages/admin/StudentManagement.jsx
     if (activePage === "إدارة الطلاب") {
-      return <StudentMan         agement />;
+      return <StudentManagement />;
     }
     // راح تحصلين هذه الفانكشن في ملف src/pages/admin/TeachersManagement.jsx
     if (activePage === "إدارة المعلمين") {
@@ -89,23 +108,23 @@ const AdminDashboard = () => {
 
     return (
       <div className="px-4 py-6 w-full max-w-4xl mx-auto">
-      <h2 className="text-2xl sm:text-3xl text-right font-bold mb-4 text-[#5196ac]">
-        {activePage}
-      </h2>
-      <div  className="p-4 rounded-xl shadow-md bg-zinc-50">
-        <p className="text-gray-600 text-center">محتوى {activePage}.</p>
+        <h2 className="text-2xl sm:text-3xl text-right font-bold mb-4 text-[#5196ac]">
+          {activePage}
+        </h2>
+        <div className="p-4 rounded-xl shadow-md bg-zinc-50">
+          <p className="text-gray-600 text-center">محتوى {activePage}.</p>
+        </div>
       </div>
-    </div>
     );
   };
+
   return (
-    <div dir="rtl"  className="flex h-screen bg-gray-100">
+    <div dir="rtl" className="flex h-screen bg-gray-100">
       <div
         className={classNames(
           "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 md:right-0 right-0 z-30 transition-transform duration-200 ease-in-out h-full",
-
           {
-           "translate-x-full": !sidebarOpen,
+            "translate-x-full": !sidebarOpen,
             "translate-x-0": sidebarOpen,
           }
         )}
@@ -126,8 +145,7 @@ const AdminDashboard = () => {
                 "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-200",
                 {
                   "bg-[#5196ac] text-white shadow-md": activePage === name,
-                  "text-white hover:bg-[#5196AC] hover:opacity-80":
-                    activePage !== name,
+                  "text-white hover:bg-[#5196AC] hover:opacity-80": activePage !== name,
                 }
               )}
               onClick={() => {
@@ -143,10 +161,10 @@ const AdminDashboard = () => {
       </div>
 
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
           onClick={() => setSidebarOpen(false)}
-        ></div>
+        />
       )}
 
       <div className="flex-1 flex flex-col ml-0 overflow-auto">
@@ -154,7 +172,7 @@ const AdminDashboard = () => {
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <span className="font-bold text-[#5196ac]">لوحة الأدمن</span>{" "}
+          <span className="font-bold text-[#5196ac]">لوحة الأدمن</span>
         </div>
 
         <div className="p-6">{renderContent()}</div>

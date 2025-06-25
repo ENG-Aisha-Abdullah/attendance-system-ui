@@ -18,3 +18,4 @@ export const addClass = async (data) => {
 export const deleteClass = async (id) => {
   await axios.delete(`${API}/${id}`);
 };
+
