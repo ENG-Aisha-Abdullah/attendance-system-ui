@@ -21,6 +21,8 @@ import StudentManagement from "./StudentManagement";
 import TeachersManagement from "./TeachersManagement";
 import PrinciplesManagement from "./PrinciplesManagement";
 import StudentAssignment from "./StudentAssignment";
+import TeacherAssignment from "./TeacherAssignment";
+import PrincipleAssignment from "./PrincipleAssignment";
 
 const menuItems = [
   { name: "Dashboard", icon: Home },
@@ -47,6 +49,7 @@ const AdminDashboard = () => {
     if (activePage === "إدارة المعلمين") {
       return <TeachersManagement />;
     }
+
     if (activePage === "إدارة المرشدين") {
       return <PrinciplesManagement />;
     }
@@ -56,9 +59,15 @@ const AdminDashboard = () => {
     if (activePage === "تعيين طلاب") {
       return <StudentAssignment />;
     }
+    if (activePage == "تعيين معلمين") {
+      return <TeacherAssignment />;
+    }
+    if (activePage === "تعيين مرشد") {
+      return <PrincipleAssignment />;
+    }
     if (activePage === "Dashboard") {
       return (
-        <div  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-[#5196ac]">
             <h3 className="text-xl font-semibold text-[#5196ac] mb-2">
               الطلاب
@@ -89,23 +98,23 @@ const AdminDashboard = () => {
 
     return (
       <div className="px-4 py-6 w-full max-w-4xl mx-auto">
-      <h2 className="text-2xl sm:text-3xl text-right font-bold mb-4 text-[#5196ac]">
-        {activePage}
-      </h2>
-      <div  className="p-4 rounded-xl shadow-md bg-zinc-50">
-        <p className="text-gray-600 text-center">محتوى {activePage}.</p>
+        <h2 className="text-2xl sm:text-3xl text-right font-bold mb-4 text-[#5196ac]">
+          {activePage}
+        </h2>
+        <div className="p-4 rounded-xl shadow-md bg-zinc-50">
+          <p className="text-gray-600 text-center">محتوى {activePage}.</p>
+        </div>
       </div>
-    </div>
     );
   };
   return (
-    <div dir="rtl"  className="flex h-screen bg-gray-100">
+    <div dir="rtl" className="flex h-screen bg-gray-100">
       <div
         className={classNames(
           "bg-[#27465b] shadow-lg w-64 fixed md:static md:translate-x-0 md:right-0 right-0 z-30 transition-transform duration-200 ease-in-out h-full",
 
           {
-           "translate-x-full": !sidebarOpen,
+            "translate-x-full": !sidebarOpen,
             "translate-x-0": sidebarOpen,
           }
         )}
@@ -143,7 +152,7 @@ const AdminDashboard = () => {
       </div>
 
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-40 z-20 md:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>

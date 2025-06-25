@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getAllClasses } from "../../services/classService";
-import { getUnassignedStudents } from "../../services/studentService";
+import { getUnassignedStudents, assignStudentsToClass, getUnassignedStudents as fetchUnassignedStudents } from "../../services/studentService";
 
 const StudentAssignment = () => {
   const [classes, setClasses] = useState([]);
@@ -10,19 +10,24 @@ const StudentAssignment = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
 
   useEffect(() => {
-    getAllClasses().then(setClasses);
-    getUnassignedStudents().then(setStudents);
+    async function loadData() {
+      const classesData = await getAllClasses();
+      const studentsData = await fetchUnassignedStudents();
+      setClasses(classesData);
+      setStudents(studentsData);
+    }
+    loadData();
   }, []);
 
   const toggleStudentSelection = (studentId) => {
-    setSelectedStudents(prev => 
+    setSelectedStudents((prev) =>
       prev.includes(studentId)
-        ? prev.filter(id => id !== studentId)
+        ? prev.filter((id) => id !== studentId)
         : [...prev, studentId]
     );
   };
 
-  const handleAssign = () => {
+  const handleAssign = async () => {
     if (!selectedClassId) {
       Swal.fire("خطأ", "يرجى اختيار الصف أولاً", "error");
       return;
@@ -31,21 +36,21 @@ const StudentAssignment = () => {
       Swal.fire("خطأ", "يرجى اختيار طالب واحد على الأقل", "error");
       return;
     }
-    
-    // نفترض دالة تعيين في studentService أو classService:
-    // assignStudentsToClass(selectedClassId, selectedStudents)
-    //  .then(...)
-    // هنا سنعرض رسالة نجاح فقط كمثال:
 
-    Swal.fire({
-      icon: "success",
-      title: "تم التعيين",
-      text: `تم تعيين ${selectedStudents.length} طالب(طالب) للصف المحدد`,
-    });
-
-    // بعد التعيين، ممكن تحدث حالة الواجهة
-    setSelectedClassId("");
-    setSelectedStudents([]);
+    try {
+      await assignStudentsToClass(selectedClassId, selectedStudents);
+      Swal.fire({
+        icon: "success",
+        title: "تم التعيين",
+        text: `تم تعيين ${selectedStudents.length} طالب(طالب) للصف المحدد`,
+      });
+      const updatedStudents = await fetchUnassignedStudents();
+      setStudents(updatedStudents);
+      setSelectedClassId("");
+      setSelectedStudents([]);
+    } catch (error) {
+      Swal.fire("خطأ", "حدث خطأ أثناء التعيين", "error");
+    }
   };
 
   return (
