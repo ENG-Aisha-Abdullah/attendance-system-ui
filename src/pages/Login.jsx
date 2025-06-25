@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const Login = () => {
-  const [name, setName] = useState("");
+//   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ const Login = () => {
 
     try {
       const res = await axios.post("", {
-        name,
         email,
         password,
       });
@@ -55,7 +54,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white bg-indigo-200">
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden flex mx-5">
         <div className="w-1/2 hidden md:flex items-center justify-center bg-white">
           <img
@@ -65,25 +64,25 @@ const Login = () => {
           />
         </div>
         <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-          <h2 className="text-2xl font-semibold text-indigo-800 mb-2">Sign in</h2>
+          <h2 className="text-2xl font-semibold text-[#27465b] mb-2">Sign in</h2>
           <p className="text-sm text-gray-500 mb-6">
             Access to your Attendance System
           </p>
-
+{/* 
           <input
             type="text"
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="mb-4 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-800"
-          />
+          /> */}
 
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mb-4 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-800"
+            className="mb-4 w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#3a4e5c]"
           />
 
           <input
@@ -91,12 +90,12 @@ const Login = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mb-4 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-800"
+            className="mb-4 w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#3a4e5c]"
           />
 
           <button
             onClick={LogInHandle}
-            className="w-full font-bold bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900 transition cursor-pointer"
+            className="w-full font-bold text-lg bg-[#27465b] text-white py-3 rounded-lg hover:bg-[#5196ac] hover:opacity-80 transition cursor-pointer"
           >
             Login
           </button>
