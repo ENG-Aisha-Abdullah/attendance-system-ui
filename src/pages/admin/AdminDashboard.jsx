@@ -23,6 +23,8 @@ import PrinciplesManagement from "./PrinciplesManagement";
 import StudentAssignment from "./StudentAssignment";
 import TeacherAssignment from "./TeacherAssignment";
 import PrincipleAssignment from "./PrincipleAssignment";
+import ExcusesManagement from "./ExcusesManagement";
+import Reports from "./Reports.jsx";
 
 const menuItems = [
   { name: "Dashboard", icon: Home },
@@ -64,6 +66,12 @@ const AdminDashboard = () => {
     }
     if (activePage === "تعيين مرشد") {
       return <PrincipleAssignment />;
+    }
+    if (activePage === "الأعذار") {
+      return <ExcusesManagement />;
+    }
+    if (activePage === "التقارير") {
+      return <Reports />;
     }
     if (activePage === "Dashboard") {
       return (
